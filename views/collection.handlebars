@@ -1,0 +1,27 @@
+<h2 class="page-header">Collection</h2>
+
+<div>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th><a href='/collection?sort=+artist' />Artist</th>
+            <th><a href='/collection?sort=+title' />Title</th>
+            <th><a href='/collection?sort=+year' />Year</th>
+            <th><a href='/collection?sort=+dateAdded' />Date added</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data.releases}}
+        <tr>
+            <td><a href='/prices/{{albumId}}' />{{artist}}</td>
+            <td>{{title}}</td>
+            <td>{{year}}</td>
+            <td>{{formattedDate}}</td>
+            <!--
+            <td><img src="{{coverImage}}" heigth="20" width="20" /></td>
+            -->
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+</div>

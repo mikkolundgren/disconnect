@@ -1,0 +1,32 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "Discogs API testing",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha"
+  },
+  "author": "Mikko",
+  "license": "AGL",
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "dateformat": "^2.0.0",
+    "disconnect": "1.1.0",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "highcharts": "^5.0.12",
+    "mongodb": "*",
+    "mongoose": "*",
+    "node-cache": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-facebook": "*"
+  }
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Disconnect</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="text/javascript" src="/js/jquery-3.2.1.min.js" ></script>
+    <script type="text/javascript" src="/js/highcharts.js" ></script>
+</head>
+
+<body>
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+              <li role="presentation"><a href="/">Front page</a></li>
+              {{#if user}}
+              <li role="presentation"><a href="/collection">Collection</a></li>
+              <li role="presentation"><a href="/admin">Admin</a></li>
+              <li role="presentation"><a href="/auth/logout">Logout</a></li>
+              {{else}}
+              <li role="presentation"><a href="/auth/login">Login</a></li>
+              {{/if}}
+          </ul>
+        </nav>
+        <h3 class="text-muted">Disconnect</h3>
+      </div>
+      <div>
+          {{#if success_msg}}
+            <div class="alert alert-success">{{success_msg}}</div>
+          {{/if}}
+
+          {{#if error_msg}}
+            <div class="alert alert-danger">{{error_msg}}</div>
+          {{/if}}
+
+          {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+          {{/if}}
+      {{{body}}}
+
+      </div>
+      <footer class="footer">
+        <p>&copy; 2017 Mikko</p>
+      </footer>
+    </div> <!-- /container -->
+ 
+</body>
+</html>

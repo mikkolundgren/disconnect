@@ -1,0 +1,24 @@
+
+<h2 class="page-header">Prices</h2>
+
+<div>{{priceData.artist}}  {{priceData.title}} </div>
+
+<div id="hc_container" style="width:100%, height:400px;"></div>
+<script>
+
+$(function () { 
+    var myChart = Highcharts.chart('hc_container', {
+        
+        title: {
+            text: 'Price'
+        },
+        xAxis: {
+            categories: [{{{priceData.dates}}}]
+        },
+        series: [{
+            name: 'Price',
+            data: [{{ priceData.prices }}]
+        }]
+    });
+});
+</script>   
