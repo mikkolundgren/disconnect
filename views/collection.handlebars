@@ -1,5 +1,8 @@
 <h2 class="page-header">Collection</h2>
-
+<form action="/collection/search" method="POST">
+    <input type="text" name="q" id="q"></input>
+    <button type="submit" value="Search" class="btn btn-info">Search</button>
+</form>
 <div>
     <table class="table table-striped">
     <thead>
@@ -14,12 +17,15 @@
         {{#each data.releases}}
         <tr>
             <td><a href='/prices/{{albumId}}' />{{artist}}</td>
-            <td>{{title}}</td>
+            <td><a href='/playhistory/{{albumId}}' />{{title}}</td>
             <td>{{year}}</td>
             <td>{{formattedDate}}</td>
             <!--
             <td><img src="{{coverImage}}" heigth="20" width="20" /></td>
             -->
+            <td>
+                <a href="/collection/played/{{albumId}}" class="btn btn-info" role="button">Played</a>
+            </td>
         </tr>
         {{/each}}
     </tbody>

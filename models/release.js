@@ -25,3 +25,11 @@ module.exports.findReleases = function(sort, callback) {
         sort(sort).
         exec(callback);
 }
+
+module.exports.findReleasesByArtist = function(q, callback) {
+    var query = {artist: new RegExp(q, 'i')};
+    Release.
+        find(query).
+        sort('+artist').
+        exec(callback);
+}

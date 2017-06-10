@@ -10,12 +10,14 @@
   "author": "Mikko",
   "license": "AGL",
   "dependencies": {
+    "async": "^2.4.1",
     "bcryptjs": "*",
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "^1.4.1",
     "dateformat": "^2.0.0",
     "disconnect": "1.1.0",
+    "dotenv": "^4.0.0",
     "express": "*",
     "express-handlebars": "*",
     "express-messages": "*",
@@ -26,7 +28,7 @@
     "mongoose": "*",
     "node-cache": "*",
     "passport": "*",
-    "passport-http": "*",
-    "passport-facebook": "*"
+    "passport-facebook": "*",
+    "passport-http": "*"
   }
 }

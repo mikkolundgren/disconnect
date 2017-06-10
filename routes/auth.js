@@ -7,8 +7,8 @@ router.get('/facebook', passport.authenticate('facebook', { scope: 'email'}));
 
 router.get('/facebook/callback', 
     passport.authenticate('facebook', {
-        successRedirect: '/',
-        failureRedirect: '/login'
+        successRedirect: '/collection',
+        failureRedirect: '/'
     }));
 
 router.get('/login', function(req, res) {
@@ -17,6 +17,7 @@ router.get('/login', function(req, res) {
 
 router.get('/logout', function(req, res) {
     req.logout();
+    req.flash('success_msg', 'You\'re logged out.');
     res.redirect('/');
 });
 

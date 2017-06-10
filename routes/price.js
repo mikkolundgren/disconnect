@@ -10,25 +10,30 @@ var Highcharts = require('highcharts');
 const NodeCache = require('node-cache');
 const myCache = new NodeCache();
 
-var priceData = {};
+
 
 router.get('/:albumId', function(req, res) {
-    Price.findPricesByAlbumId(req.params.albumId, function(err, prices) {
+    var albumId = req.params.albumId;
+    Price.findPricesByAlbumId(albumId, function(err, prices) {
         if (err) {
             console.log(err);
-            throw err;
         }
-        console.log("price: %j", prices );
-        formatData(prices);
+        
+        var priceData = formatData(prices);
+        priceData.albumId = albumId;
         console.log(priceData);
         res.render('price', { user : req.user, priceData : priceData });
     });
 });
 
 function formatData(prices) {
-    
+    console.log(prices);
+    var priceData = {};
+    if (!prices || prices.length == 0) return priceData;
+
     priceData.title = prices[0].title;
     priceData.artist = prices[0].artist;
+    priceData.albumId = prices[0].albumId;
     var p_arr = [];
     var d_arr = [];
     for (var p in prices) {
@@ -38,6 +43,7 @@ function formatData(prices) {
     }
     priceData.prices = p_arr;
     priceData.dates = d_arr;
+    return priceData;
 }
 
 module.exports = router;

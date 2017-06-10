@@ -1,0 +1,20 @@
+<h2 class="page-header">Playhistory</h2>
+
+<div>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Last played</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{playDate}}</td>
+            <td><a href="/playhistory/delete/{{id}}" class="btn btn-warning" role="button">Delete</td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+</div>

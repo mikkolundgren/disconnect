@@ -1,7 +1,7 @@
 
-<h2 class="page-header">Prices</h2>
+<h2 class="page-header">Prices {{priceData.artist}}  {{priceData.title}}</h2>
 
-<div>{{priceData.artist}}  {{priceData.title}} </div>
+<div><a href="/admin/updateprice/{{priceData.albumId}}" class="btn btn-info" role="button">Fetch price</a></div>
 
 <div id="hc_container" style="width:100%, height:400px;"></div>
 <script>

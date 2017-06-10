@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var exphbs = require('express-handlebars');
 var session = require('express-session');
+var bodyParser = require('body-parser');
+
+var dotenv = require('dotenv').config();
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -10,8 +13,11 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 
-//mongoose.connect('mongodb://it-dl742-hki/disconnect');
-mongoose.connect('mongodb://d_user:perkele666@ds153501.mlab.com:53501/CloudFoundry_g4rfv366_8vvpen5j');
+var DB_USER = process.env.DB_USER;
+var DB_PASSWD = process.env.DB_PASSWD;
+var DB_URI = process.env.DB_URI;
+
+mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWD + '@' + DB_URI);
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
@@ -19,16 +25,19 @@ var collection = require('./routes/collection');
 var prices = require('./routes/price');
 var admin = require('./routes/admin');
 var auth = require('./routes/auth');
+var playhistory = require('./routes/playhistory');
 
 // Init App
 var app = express();
-
-var db = new Discogs().database();
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
+
+// BodyParser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -61,7 +70,7 @@ app.use('/collection', collection);
 app.use('/prices', prices);
 app.use('/admin', admin);
 app.use('/auth', auth);
-
+app.use('/playhistory', playhistory);
 
 // Set Port
 app.set('port', (process.env.PORT || 3000));

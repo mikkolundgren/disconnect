@@ -11,44 +11,29 @@ const myCache = new NodeCache();
 var col = new Discogs().user().collection();
 var db = new Discogs().database();
 
+var async = require('async');
+
 router.get('/', function(req, res){
     res.render('admin', { user : req.user });
 });
 
 router.get('/reloadcollection', ensureAuthenticated, function(req, res) {
-
     loadCollection(function(data) {
-        var releases = data.releases;
-        for (var i in releases) {
-            var dateAdded = releases[i].date_added;
-            var coverImage = releases[i].basic_information.cover_image;
-            loadRelease(releases[i].id, dateAdded, coverImage, function(release) {
-                createRelease(release);
-            });    
-            var waitTime = new Date(new Date().getTime() + 2 * 1000);
-            while (waitTime > new Date()) {}
+        for (var i in data.releases) {
+            createBaseRelease(data.releases[i]);
         }
     });
-    res.render('admin', { user : req.user });
+    req.flash('success_msg', 'Collection loaded.');
+    res.render('admin', { user : req.user }); 
 });
 
-router.get('/reloadprices', ensureAuthenticated, function(req, res){
-    console.log("Reloading prices...");
-    Release.findReleases("+artist", function(err, data) {
-        if(err) throw err;
-        console.log("data: %j", data);
-        for (var i in data) {
-            var albumId = data[i].albumId;
-            console.log("albumId: " + albumId);
-            loadRelease(albumId, "", "", function(release) {
-                createPrice(release);    
-            });
-            var waitTime = new Date(new Date().getTime() + 2 * 1000);
-            while (waitTime > new Date()) {}
-        }    
+router.get('/updateprice/:albumId', ensureAuthenticated, function(req, res) {
+    var albumId = req.params.albumId;
+    console.log("Updating price: " + albumId);
+    loadRelease(albumId, function(release) {
+        createPrice(release);
     });
-    res.render('admin', { user : req.user });
-    
+    res.redirect('/prices/' + albumId);
 });
 
 function ensureAuthenticated(req, res, next){
@@ -56,32 +41,51 @@ function ensureAuthenticated(req, res, next){
         return next();
     } else {
         //req.flash('error_msg','You are not logged in');
-        res.redirect('/auth/login');
+        res.redirect('/');
     }
 }
 
 function loadCollection (callback) {
-        col.getReleases('mikko.lundgren', 0, {page: 1, per_page: 10}, function(err, data) { 
-            if (err) throw err;
+        col.getReleases('mikko.lundgren', 0, {page: 1, per_page: 50, sort: 'added', sort_order: 'desc'}, function(err, data) { 
+            if (err) console.log(err);
             console.log("col fetched from dg: %j", data);
             callback(data);
         });
 }
 
-function loadRelease(albumId, dateAdded, coverImage, callback) {
+function loadRelease(albumId, callback) {
     console.log("Getting release with id: " + albumId);
     db.getRelease(albumId, function(err, data) {
         if (err) {
           console.log(err);
-          return;
         } 
-        data.dateAdded = dateAdded;
-        data.coverImage = coverImage;
         callback(data);
     });
 }
 
+function createBaseRelease(release) {
+    console.log("Creating base release: ", release.id);
+
+    var newRelease = new Release({
+        _id: release.id,
+        albumId: release.id,
+        title: release.basic_information.title,
+        artist: release.basic_information.artists[0].name,
+        year: release.basic_information.year,
+        dateAdded: release.date_added,
+        coverImage: release.basic_information.cover_image
+    });
+
+    Release.createRelease(newRelease, function(err, release){
+        if (err) console.log(err);
+    }); 
+
+}
+
 function createRelease(release) {
+    
+    console.log("Creating release: ", release.id);
+
     var newRelease = new Release({
         _id: release.id,
         albumId: release.id,
@@ -95,13 +99,13 @@ function createRelease(release) {
     });
 
     Release.createRelease(newRelease, function(err, release){
-        if (err) throw err;
+        if (err) console.log(err);
     }); 
 }
 
 function createPrice(release) {
-    //console.log("Rel: %j", release);
     if (!release || release == undefined) return;
+    console.log("Creating price: ", release.id);
     var newPrice = new Price({
         albumId: release.id,
         title: release.title,
@@ -112,8 +116,8 @@ function createPrice(release) {
     });
 
     Price.createPrice(newPrice, function(err, price){
-        if(err) throw err;
-        console.log(price);
+        if(err) console.log(err);
+        //console.log(price);
     });
 }
 
