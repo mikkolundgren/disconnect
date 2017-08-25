@@ -16,6 +16,14 @@ module.exports.createPrice = function(newPrice, callback) {
     newPrice.save(callback);
 }
 
+module.exports.findLatestPrices = function(limit, callback) {
+    Price.
+        find().
+        sort('-priceDate').
+        limit(limit).
+        exec(callback);
+}
+
 module.exports.findPricesByAlbumId = function(albumId, callback) {
     Price.
         find({albumId: albumId}).

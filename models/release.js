@@ -26,6 +26,14 @@ module.exports.findReleases = function(sort, callback) {
         exec(callback);
 }
 
+module.exports.findRecentlyAdded = function(limit, callback) {
+    Release.
+        find().
+        sort('-dateAdded').
+        limit(limit).
+        exec(callback);
+}
+
 module.exports.findReleasesByArtist = function(q, callback) {
     var query = {artist: new RegExp(q, 'i')};
     Release.

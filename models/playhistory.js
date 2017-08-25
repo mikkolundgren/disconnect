@@ -20,6 +20,14 @@ module.exports.findPlayhistoryByAlbumId = function(albumId, callback) {
         exec(callback);
 }
 
+module.exports.findRecentlyPlayed = function(limit, callback) {
+    Playhistory.
+        find().
+        sort('-playDate').
+        limit(limit).
+        exec(callback);
+}
+
 module.exports.findPlayhistoryAndRemoveById = function(id, callback) {
     var query = { _id: id };
     Playhistory.
